@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minichat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-CuOF+2SnTUfTwSZjCXf01h7uYhfOBuxIhGKPbfEJ3+FqH/s6cIFN9bGr1HmAg4fQ" crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 class="mt-5">MINICHAT</h1>
+    <hr>
+    <form id="myform">
+        <div class="row">
+            <div class="col-8">
+                <input type="text" id="txtMessage" class="form-control" placeholder="mensaje">
+            </div>
+            <div class="col-4">
+                <button type="submit" id="btnMessage" class="btn btn-primary w-100">Enviar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-4">
+        <div class="col">
+            <ul id="messages">
+                
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.js"></script>
+    <script>
+        // CONECTO EL CLIENTE CON SOCKET-SERVER
+        const socket = io("http://localhost:4000") 
+    
+        // REFERENCIAS A HTML
+        const formulario = document.querySelector("#myform");
+        const mensaje = document.querySelector("#txtMessage");
+        const mensajes = document.querySelector("#messages");
+        
+        // ESCUCHO EL EVENTO SUBMIT
+        formulario.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nuevoMensaje = mensaje.value;
+            if(nuevoMensaje){
+                socket.emit("MENSAJE-TO-SERVER", {txt: nuevoMensaje, id: socket.id})
+            }
+        });
+        socket.on("MENSAJE-FROM-SERVER", data => {
+            console.log(data)
+            mensajes.innerHTML += `<li>${data.txt}</li>`
+        })
+
+
+    </script>
+</body>
+</html>
