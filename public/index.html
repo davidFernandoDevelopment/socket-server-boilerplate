@@ -36,27 +36,27 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.js"></script>
     <script>
-        // CONECTO EL CLIENTE CON SOCKET-SERVER
-        const socket = io("https://react-socket-boilerplate.herokuapp.com/") 
-    
-        // REFERENCIAS A HTML
+        // // CONECTO EL CLIENTE CON SOCKET-SERVER
+        // const socket = io("https://react-socket-boilerplate.herokuapp.com/") 
+        const socket = io("http://localhost:4000")
+
+        // // REFERENCIAS A HTML
         const formulario = document.querySelector("#myform");
         const mensaje = document.querySelector("#txtMessage");
         const mensajes = document.querySelector("#messages");
         
-        // ESCUCHO EL EVENTO SUBMIT
+        // // ESCUCHO EL EVENTO SUBMIT
         formulario.addEventListener("submit", (e) => {
             e.preventDefault();
             const nuevoMensaje = mensaje.value;
             if(nuevoMensaje){
                 socket.emit("MENSAJE-TO-SERVER", {txt: nuevoMensaje, id: socket.id})
+                mensaje.value = "";
             }
         });
         socket.on("MENSAJE-FROM-SERVER", data => {
-            console.log(data)
             mensajes.innerHTML += `<li>${data.txt}</li>`
         })
-
 
     </script>
 </body>
